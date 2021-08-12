@@ -41,18 +41,34 @@ function display(param) {
   let num1Int = Number(num1Arr.join(''));
   let num2Int = Number(num2Arr.join(''));
 
-  if (keypadButton == '+') {
-    // if user click is "+" (true) then set operator value variable to "+"
+  if (
+    keypadButton === '+' ||
+    keypadButton === '-' ||
+    keypadButton === '*' ||
+    keypadButton === '÷'
+  ) {
+    // if user click is "+" or "-" (true) then set operator value variable to either "+", "-"
     operatorValue = keypadButton;
-  } else if (keypadButton == '=') {
-    // if user click is "=" then call operate function and output result
+  } else if (operatorValue === '+' && keypadButton === '=') {
     const addition = operate(add, num1Int, num2Int);
     displayOutput.textContent = addition;
-  } else if (operatorValue != '+') {
-    // if operator value is not set to "+" then push user click number to num1
+  } else if (operatorValue === '-' && keypadButton === '=') {
+    const subtraction = operate(subtract, num1Int, num2Int);
+    displayOutput.textContent = subtraction;
+  } else if (operatorValue === '*' && keypadButton === '=') {
+    const multiplication = operate(multiply, num1Int, num2Int);
+    displayOutput.textContent = multiplication;
+  } else if (operatorValue === '÷' && keypadButton === '=') {
+    const division = operate(divide, num1Int, num2Int);
+    displayOutput.textContent = division;
+  } else if (operatorValue === '') {
     num1Arr.push(keypadButton);
-  } else if (operatorValue == '+') {
-    // if operator value is set to "+" then push user click number to num2
+  } else if (
+    operatorValue === '+' ||
+    operatorValue === '-' ||
+    operatorValue === '*' ||
+    operatorValue === '÷'
+  ) {
     num2Arr.push(keypadButton);
   }
 }
