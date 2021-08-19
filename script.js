@@ -1,91 +1,110 @@
 // Query Selectors
 const intKeys = document.querySelectorAll('.integer');
 const operateKeys = document.querySelectorAll('.operator');
+const computeKey = document.querySelector('.compute');
 const acKey = document.querySelector('.clear');
 const decimalKey = document.querySelector('.decimal');
 
 // Event Listners
-Array.from(intKeys).forEach(integer =>
-  integer.addEventListener('click', display),
-);
-Array.from(operateKeys).forEach(operator =>
-  operator.addEventListener('click', display),
-);
+intKeys.forEach(int => int.addEventListener('click', pushNumber));
+operateKeys.forEach(op => op.addEventListener('click', pushOperator));
 acKey.addEventListener('click', allClear);
-decimalKey.addEventListener('click', display);
+computeKey.addEventListener('click', handleCompute);
+decimalKey.addEventListener('click', addDecimal);
+
+// output display numbers in to the display div
+const displayOutput = document.querySelector('.display');
+
+// Array to store numbers and operators
+let numArray = [];
 
 // Clear Function
 function allClear() {
   const displayOutput = document.querySelector('.display');
   displayOutput.textContent = '';
-  keypadDisplay = [];
-  num1Arr = [];
-  num2Arr = [];
-  operatorValue = '';
+  numArray = [];
 }
 
 // Auto reset function
 function resetCalculation() {
-  keypadDisplay = [];
-  num1Arr = [];
-  num2Arr = [];
-  operatorValue = '';
+  numArray = [];
 }
 
-// Display: function to store number values into an array
-let keypadDisplay = [];
-let num1Arr = [];
-let num2Arr = [];
-let operatorValue = '';
-
-function display(param) {
-  // keypad button value is pushed to the keypad display array
-  let keypadButton = param.target.value;
-  keypadDisplay.push(keypadButton);
-
-  // output display numbers in to the display div
-  const displayOutput = document.querySelector('.display');
-  displayOutput.textContent = keypadDisplay.join('');
-
-  // array of num1 and num2 numbers are joined and type coverted to integer
-  let num1Int = Number(num1Arr.join(''));
-  let num2Int = Number(num2Arr.join(''));
-
-  if (
-    keypadButton === '+' ||
-    keypadButton === '-' ||
-    keypadButton === '*' ||
-    keypadButton === '÷'
-  ) {
-    // if user click is "+" or "-" (true) then set operator value variable to either "+", "-"
-    operatorValue = keypadButton;
-  } else if (operatorValue === '+' && keypadButton === '=') {
-    const addition = operate(add, num1Int, num2Int);
-    displayOutput.textContent = addition;
-    resetCalculation();
-  } else if (operatorValue === '-' && keypadButton === '=') {
-    const subtraction = operate(subtract, num1Int, num2Int);
-    displayOutput.textContent = subtraction;
-    resetCalculation();
-  } else if (operatorValue === '*' && keypadButton === '=') {
-    const multiplication = operate(multiply, num1Int, num2Int);
-    displayOutput.textContent = multiplication;
-    resetCalculation();
-  } else if (operatorValue === '÷' && keypadButton === '=') {
-    const division = operate(divide, num1Int, num2Int);
-    displayOutput.textContent = division;
-    resetCalculation();
-  } else if (operatorValue === '') {
-    num1Arr.push(keypadButton);
-  } else if (
-    operatorValue === '+' ||
-    operatorValue === '-' ||
-    operatorValue === '*' ||
-    operatorValue === '÷'
-  ) {
-    num2Arr.push(keypadButton);
+function addDecimal(event) {
+  const decimal = event.target.value;
+  console.log(decimal);
+  if (numArray[numArray.length - 1].includes(decimal) === false) {
+    numArray.push(decimal);
   }
 }
+
+function concatNum1() {
+  let joinNum = numArray.join('');
+  console.log(joinNum);
+  displayOutput.textContent = joinNum;
+  numArray = [];
+  numArray.splice(0, numArray.length, joinNum);
+}
+
+function concatNum2() {
+  let num2Join = numArray.splice(2, numArray.length);
+  let joinNum2 = num2Join.join('');
+  console.log(joinNum2);
+  displayOutput.textContent = joinNum2;
+  numArray.splice(2, numArray.length, joinNum2);
+}
+
+function pushNumber(event) {
+  numArray.push(event.target.value);
+  displayOutput.textContent = event.target.value;
+  if (
+    numArray[1] === '+' ||
+    numArray[1] === '-' ||
+    numArray[1] === '*' ||
+    numArray[1] === '÷'
+  ) {
+    concatNum2();
+  } else {
+    concatNum1();
+  }
+}
+function pushOperator(event) {
+  // if the last element of numArray is an operator after a pair don't push but calculate
+  numArray.push(event.target.value);
+  if (numArray.includes(event.target.value, 3)) {
+    const newNum = handleCompute();
+    numArray.push(newNum);
+    numArray.push(event.target.value);
+  }
+}
+
+function handleCompute() {
+  // when user press = split index [0] number1 , index [1] operator and index [2] number2
+  const num1 = Number(numArray[0]);
+  const operator = numArray[1].split('');
+  const num2 = Number(numArray[2]);
+  const calculation = result(operator, num1, num2);
+  const roundCalculation = calculation.toFixed(2);
+  displayOutput.textContent = roundCalculation;
+  resetCalculation();
+  return calculation;
+}
+
+function result(operator, num1, num2) {
+  if (operator == '+') {
+    return operate(add, num1, num2);
+  }
+  if (operator == '-') {
+    return operate(subtract, num1, num2);
+  }
+  if (operator == '*') {
+    return operate(multiply, num1, num2);
+  }
+  if (operator == '÷') {
+    return operate(divide, num1, num2);
+  }
+}
+
 // math functions
 function add(num1, num2) {
   return num1 + num2;
@@ -101,7 +120,7 @@ function multiply(num1, num2) {
 
 function divide(num1, num2) {
   if (num2 === 0 || num2 === isNaN) {
-    return 'UNDEFINED: DIVIDE BY NON-ZERO NUMBER!';
+    return 'HELLO! PLEASE DIVIDE BY NON-ZERO NUMBER.';
   } else {
     return num1 / num2;
   }
