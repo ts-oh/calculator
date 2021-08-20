@@ -4,6 +4,7 @@ const operateKeys = document.querySelectorAll('.operator');
 const computeKey = document.querySelector('.compute');
 const acKey = document.querySelector('.clear');
 const decimalKey = document.querySelector('.decimal');
+const bsKey = document.querySelector('.backspace');
 
 // Event Listners
 intKeys.forEach(int => int.addEventListener('click', pushNumber));
@@ -11,6 +12,7 @@ operateKeys.forEach(op => op.addEventListener('click', pushOperator));
 acKey.addEventListener('click', allClear);
 computeKey.addEventListener('click', handleCompute);
 decimalKey.addEventListener('click', addDecimal);
+bsKey.addEventListener('click', backspaceKey);
 
 // output display numbers in to the display div
 const displayOutput = document.querySelector('.display');
@@ -25,9 +27,13 @@ function allClear() {
   numArray = [];
 }
 
-// Auto reset function
+// Reset function
 function resetCalculation() {
   numArray = [];
+}
+
+function backspaceKey() {
+  numArray[numArray.length - 1] = numArray[numArray.length - 1].slice(0, -1);
 }
 
 function addDecimal(event) {
@@ -75,6 +81,14 @@ function pushOperator(event) {
     const newNum = handleCompute();
     numArray.push(newNum);
     numArray.push(event.target.value);
+  } else if (
+    numArray[0] === '+' ||
+    numArray[0] === '-' ||
+    numArray[0] === '*' ||
+    numArray[0] === '+'
+  ) {
+    numArray = [];
+    return (displayOutput.textContent = 'Please enter a number!');
   }
 }
 
@@ -84,7 +98,7 @@ function handleCompute() {
   const operator = numArray[1].split('');
   const num2 = Number(numArray[2]);
   const calculation = result(operator, num1, num2);
-  const roundCalculation = calculation.toFixed(2);
+  const roundCalculation = parseFloat(calculation.toFixed(3));
   displayOutput.textContent = roundCalculation;
   resetCalculation();
   return calculation;

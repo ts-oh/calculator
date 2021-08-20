@@ -1,6 +1,6 @@
 # calculator
 
-**This was a etch-a-sketch project from 'The Odin Project' fundamentals.**
+**This was a calculator project from 'The Odin Project' fundamentals.**
 
 - Used: JavaScript, CSS, and HTML.
 - Learning Objectives:
