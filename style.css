@@ -1,0 +1,17 @@
+.calculator {
+  border-style: solid 10px black;
+  padding: 32px;
+}
+
+.display {
+  font-size: 32px;
+}
+
+.keypad > button {
+  font-size: 20px;
+  border: 1px;
+  background-color: lightgrey;
+}
+button:hover {
+  background-color: springgreen;
+}
