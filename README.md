@@ -14,7 +14,7 @@
 
 - Future Plans:
 
-  - [ ]Add keyboard support.
+  - [ ] Add keyboard support.
 
   - [ ] (+/-) positive & negative integer support.
 
