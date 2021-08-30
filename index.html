@@ -3,36 +3,52 @@
 <html>
   <head>
     <title>Calculator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <div class="container">
-      <div class="calculator">
-        <div class="display">0</div>
-        <div class="keypad">
-          <button value="+">+</button>
-          <button value="-">-</button>
-          <button value="*">*</button>
-          <button value="÷">÷</button>
-          <button value="=">=</button>
-          <button value=".">.</button>
-          <button value="ac">AC</button>
-          <button value="bs">del</button>
+    <section class="flex-container-row">
+      <section class="flex-container-column">
+        <div class="calculator">
+          <div id="model">
+            Pixel Calculator <span><img src="pixelheart.webp"</span>v1.0
+          </div>
+          <div class="display">0</div>
+          <button id="allclear" value="ac">AC</button>
+          <button id="backspace" value="bs"><-</button>
+          <button id="ops" value="÷">÷</button>
           <button value="7">7</button>
           <button value="8">8</button>
           <button value="9">9</button>
+          <button id="ops" value="*">*</button>
           <button value="4">4</button>
           <button value="5">5</button>
           <button value="6">6</button>
+          <button id="ops" value="-">-</button>
           <button value="1">1</button>
           <button value="2">2</button>
           <button value="3">3</button>
-          <button value="0">0</button>
+          <button id="ops" value="+">+</button>
+          <button id="zero" value="0">0</button>
+          <button value=".">.</button>
+          <button id="ops" value="=">=</button>
         </div>
-      </div>
-    </div>
+        <footer class="about">
+          <div class="footer-text">
+            <a href="https://github.com/ts-oh/calculator"> ts-oh/calculator</a>
+          </div>
+          <div class="footer-icon">
+            <img src="ghpixel.png" />
+          </div>
+        </footer>
+      </section>
+    </section>
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,14 +1,17 @@
+//global variables to store numbers, operators, & default-display value
 let num1 = '';
 let num2 = '';
 let operator = '';
 let defaultDisplay = '0';
 
+// query selectors
 const display = document.querySelector('.display');
 
 document
   .querySelectorAll('button')
   .forEach(element => element.addEventListener('click', handleKeyBtns));
 
+// keypad event button handle
 function handleKeyBtns(event) {
   const inputValue = event.target.value;
   if (isNum(inputValue)) {
@@ -18,7 +21,8 @@ function handleKeyBtns(event) {
   } else if (isDecimal(inputValue)) {
     addDecimals(inputValue);
   } else if (isEqual(inputValue)) {
-    calculate(inputValue);
+    const result = calculate(inputValue);
+    display.textContent = parseFloat(result.toFixed(2));
   } else if (isAllClearNumStorage(inputValue)) {
     clearAllMemory();
   } else if (isBackSpaceKey(inputValue)) {
@@ -57,15 +61,24 @@ function isBackSpaceKey(inputValue) {
   return bsKey.includes(inputValue);
 }
 
-// functions for backspace, all clear, decimals, pair calculation, and numbers & operators.
-
+// functions for backspace, all clear, decimals, pair calculation, calculation result
 function deleteValue() {
   if (num1 && operator && num2) {
+    display.textContent = num1 + operator + num2;
     num2 = num2.slice(0, -1);
-    display.textContent = num2;
-  } else if (num1) {
+    display.textContent = num1 + operator + num2;
+  } else if (num1 && operator && !num2) {
+    display.textContent = num1 + operator;
+    operator = operator.slice(0, -1);
+    display.textContent = num1 + operator;
+  } else if (num1 && !operator && !num2) {
+    display.textContent = num1;
     num1 = num1.slice(0, -1);
     display.textContent = num1;
+    if (!num1 && !operator && !num2) {
+      display.textContent = num1 + operator + num2;
+      clearAllMemory();
+    }
   }
 }
 
@@ -73,33 +86,36 @@ function assignNum(inputValue) {
   if (num1 && operator) {
     num2 += inputValue;
     display.textContent = num2;
+    if (num2.length >= 12) {
+      num2 = num2.substring(0, 12);
+      display.textContent = num2;
+    }
   } else {
     num1 += inputValue;
     display.textContent = num1;
+    if (num1.length >= 12) {
+      num1 = num1.substring(0, 12);
+      display.textContent = num1;
+    }
   }
 }
 
 function assignOperator(inputValue) {
-  // if num2 and operator are not loaded, assign user inputValue to operator
-  if (!num2 && !operator) {
+  if (!num1 && inputValue) {
+    return (display.textContent = 'enter a number');
+  } else if (!num2 && !operator) {
     operator = inputValue;
-  }
-  // if user clicks operator after a pair of number calculate
-  else {
+  } else {
     pairCalculation(inputValue);
   }
 }
 
 function pairCalculation(inputValue) {
-  // if num1, operator, num2, and operator is loaded calculate result
-  // when result is returned clear num2 and set operator to user inputValue
   if (num1 && num2 && operator) {
     num1 = calculate().toString();
     num2 = '';
     operator = inputValue;
-  }
-  // if num1 and operator is loaded, assign num2 to user inputValue
-  else if (num1 && operator) {
+  } else if (num1 && operator) {
     num2 = inputValue;
   }
 }
@@ -125,24 +141,23 @@ function clearAllMemory() {
 function calculate() {
   const convertNum1 = Number(num1);
   const convertNum2 = Number(num2);
-  const calculate = result(operator, convertNum1, convertNum2);
-  console.log(calculate);
-  display.textContent = calculate;
-  return calculate;
+  const result = operate(operator, convertNum1, convertNum2);
+  return result;
 }
 
-function result(operator, num1, num2) {
-  if (operator == '+') {
-    return operate(add, num1, num2);
+// calculation functions
+function operate(operator, num1, num2) {
+  if (operator === '+') {
+    return add(num1, num2);
   }
-  if (operator == '-') {
-    return operate(subtract, num1, num2);
+  if (operator === '-') {
+    return subtract(num1, num2);
   }
-  if (operator == '*') {
-    return operate(multiply, num1, num2);
+  if (operator === '*') {
+    return multiply(num1, num2);
   }
-  if (operator == '÷') {
-    return operate(divide, num1, num2);
+  if (operator === '÷') {
+    return divide(num1, num2);
   }
 }
 
@@ -165,8 +180,4 @@ function divide(num1, num2) {
   } else {
     return num1 / num2;
   }
-}
-
-function operate(operator, num1, num2) {
-  return operator(num1, num2);
 }
