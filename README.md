@@ -10,7 +10,7 @@
 
   - [x] Add a “backspace” button, so the user can undo if they click the wrong number.
 
-  - [ ] Make it look nice!
+  - [x] Make it look nice!
 
 - Future Plans:
 

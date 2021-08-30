@@ -37,7 +37,7 @@ function isNum(inputValue) {
 }
 
 function isBasicOperation(inputValue) {
-  const operations = ['+', '-', '*', '/'];
+  const operations = ['+', '-', '*', '÷'];
   return operations.includes(inputValue);
 }
 
