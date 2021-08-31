@@ -6,14 +6,44 @@ let defaultDisplay = '0';
 
 // query selectors
 const display = document.querySelector('.display');
+const keypadBtns = document.querySelectorAll('button');
 
-document
-  .querySelectorAll('button')
-  .forEach(element => element.addEventListener('click', handleKeyBtns));
+// event listeners
+keypadBtns.forEach(element => element.addEventListener('click', handleKeyBtns));
+window.addEventListener('keydown', kbdHandler);
+
+function kbdHandler(e) {
+  console.log(e.key);
+  if (e.key >= 0 && e.key <= 9) {
+    assignNum(e.key);
+  } else if (
+    (e.shiftKey && e.key === '+') ||
+    e.key === '-' ||
+    (e.shiftKey && e.key === '*') ||
+    e.key === '/'
+  ) {
+    assignOperator(e.key);
+  } else if (e.key === '.') {
+    addDecimals(e.key);
+  } else if (e.key === '=' || e.key === 'Enter') {
+    let result = calculate();
+    if (result === 'PLEASE DIVIDE BY NON-ZERO NUMBER!') {
+      display.textContent = result;
+    } else {
+      result = parseFloat(result.toFixed(2));
+      display.textContent = result;
+      assignResult(result);
+    }
+  } else if (e.key === 'Backspace') {
+    deleteValue(e.key);
+  } else if (e.key === 'Escape') {
+    clearAllMemory();
+  }
+}
 
 // keypad event button handle
-function handleKeyBtns(event) {
-  const inputValue = event.target.value;
+function handleKeyBtns(e) {
+  const inputValue = e.target.value;
   if (isNum(inputValue)) {
     assignNum(inputValue);
   } else if (isBasicOperation(inputValue)) {
@@ -21,7 +51,7 @@ function handleKeyBtns(event) {
   } else if (isDecimal(inputValue)) {
     addDecimals(inputValue);
   } else if (isEqual(inputValue)) {
-    let result = calculate(inputValue);
+    let result = calculate();
     if (result === 'PLEASE DIVIDE BY NON-ZERO NUMBER!') {
       display.textContent = result;
     } else {
@@ -43,7 +73,7 @@ function isNum(inputValue) {
 }
 
 function isBasicOperation(inputValue) {
-  const operations = ['+', '-', '*', '÷'];
+  const operations = ['+', '-', '*', '/'];
   return operations.includes(inputValue);
 }
 
@@ -171,7 +201,7 @@ function operate(operator, num1, num2) {
   if (operator === '*') {
     return multiply(num1, num2);
   }
-  if (operator === '÷') {
+  if (operator === '/') {
     return divide(num1, num2);
   }
 }

@@ -14,11 +14,13 @@
 
 - Future Plans:
 
-  - [ ] Add keyboard support.
+  - [x] Add keyboard support.
 
   - [ ] (+/-) positive & negative integer support.
 
   - [ ] update to a more comprehensive README.
+
+  - [ ] refactor code and make it cleaner
 
 ### Comments
 
