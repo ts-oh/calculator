@@ -21,12 +21,18 @@ function handleKeyBtns(event) {
   } else if (isDecimal(inputValue)) {
     addDecimals(inputValue);
   } else if (isEqual(inputValue)) {
-    const result = calculate(inputValue);
-    display.textContent = parseFloat(result.toFixed(2));
+    let result = calculate(inputValue);
+    if (result === 'PLEASE DIVIDE BY NON-ZERO NUMBER!') {
+      display.textContent = result;
+    } else {
+      result = parseFloat(result.toFixed(2));
+      display.textContent = result;
+      assignResult(result);
+    }
   } else if (isAllClearNumStorage(inputValue)) {
     clearAllMemory();
   } else if (isBackSpaceKey(inputValue)) {
-    deleteValue();
+    deleteValue(inputValue);
   }
 }
 
@@ -62,21 +68,23 @@ function isBackSpaceKey(inputValue) {
 }
 
 // functions for backspace, all clear, decimals, pair calculation, calculation result
-function deleteValue() {
-  if (num1 && operator && num2) {
-    display.textContent = num1 + operator + num2;
-    num2 = num2.slice(0, -1);
-    display.textContent = num1 + operator + num2;
+function deleteValue(inputValue) {
+  if (num1 && operator && num2 && inputValue === 'bs') {
+    display.textContent = num1 + operator + num2 + '<';
+    if (num1 && operator && num2) {
+      display.textContent = num1 + operator + num2 + '<';
+      num2 = num2.slice(0, -1);
+    }
   } else if (num1 && operator && !num2) {
-    display.textContent = num1 + operator;
+    display.textContent = num1 + operator + '<';
     operator = operator.slice(0, -1);
-    display.textContent = num1 + operator;
+    display.textContent = num1 + operator + '<';
   } else if (num1 && !operator && !num2) {
     display.textContent = num1;
     num1 = num1.slice(0, -1);
-    display.textContent = num1;
+    display.textContent = num1 + '<';
     if (!num1 && !operator && !num2) {
-      display.textContent = num1 + operator + num2;
+      display.textContent = num1 + operator + num2 + '<';
       clearAllMemory();
     }
   }
@@ -114,9 +122,9 @@ function pairCalculation(inputValue) {
   if (num1 && num2 && operator) {
     num1 = calculate().toString();
     num2 = '';
-    operator = inputValue;
+    display.textContent = num1;
   } else if (num1 && operator) {
-    num2 = inputValue;
+    operator = inputValue;
   }
 }
 
@@ -143,6 +151,13 @@ function calculate() {
   const convertNum2 = Number(num2);
   const result = operate(operator, convertNum1, convertNum2);
   return result;
+}
+
+function assignResult(result) {
+  num1 = result.toString();
+  num2 = '';
+  operator = '';
+  display.textContent = num1;
 }
 
 // calculation functions
@@ -176,7 +191,8 @@ function multiply(num1, num2) {
 
 function divide(num1, num2) {
   if (num2 === 0 || num2 === isNaN) {
-    return 'HELLO! PLEASE DIVIDE BY NON-ZERO NUMBER.';
+    const outputValue = 'PLEASE DIVIDE BY NON-ZERO NUMBER!';
+    return outputValue;
   } else {
     return num1 / num2;
   }
