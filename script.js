@@ -93,13 +93,13 @@ function isAllClearNumStorage(inputValue) {
 }
 
 function isBackSpaceKey(inputValue) {
-  const bsKey = 'bs';
+  const bsKey = 'backspace';
   return bsKey.includes(inputValue);
 }
 
 // functions for backspace, all clear, decimals, pair calculation, calculation result
 function deleteValue(inputValue) {
-  if (num1 && operator && num2 && inputValue === 'bs') {
+  if (num1 && operator && num2 && inputValue === 'backspace') {
     display.textContent = num1 + operator + num2 + '<';
     if (num1 && operator && num2) {
       display.textContent = num1 + operator + num2 + '<';
