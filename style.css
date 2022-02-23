@@ -5,6 +5,7 @@ https://codepen.io/darcy/pen/yGocb?editors=0100
 
 * {
   font-family: 'Press Start 2P', 'Quicksand';
+  
 }
 
 .flex-container-row {
@@ -77,6 +78,10 @@ https://codepen.io/darcy/pen/yGocb?editors=0100
   right: -4px;
 }
 
+button {
+  cursor: pointer;
+}
+
 button:hover {
   background-color: darkgray;
 }
@@ -106,7 +111,7 @@ button:active {
   grid-column: 1 / -1;
   padding: 8px 8px;
   margin: 0px 2px;
-  font-size: 16px;
+  font-size: 18px;
   color: black;
   background-color: rgb(127, 139, 127);
   height: 48px;
